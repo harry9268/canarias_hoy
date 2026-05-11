@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Gestión — Canarias Hoy</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+
+  <!-- ══════════════ AUTH WALL ══════════════ -->
+  <div id="authWall">
+    <div class="auth-box">
+      <div class="auth-logo">
+        <div class="auth-sun" aria-hidden="true"></div>
+        Canarias Hoy
+      </div>
+      <p class="auth-badge">Panel de Gestión · Acceso restringido</p>
+      <h2>Accede al panel</h2>
+      <p>Introduce la contraseña de administrador para continuar.</p>
+      <form id="authForm" novalidate>
+        <input
+          class="auth-input"
+          type="password"
+          id="authInput"
+          placeholder="••••••••••••"
+          autocomplete="current-password"
+          autofocus
+        />
+        <button type="submit" class="auth-btn">Entrar →</button>
+        <p class="auth-error" id="authError" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════════════ PANEL APP ══════════════ -->
+  <div id="panelApp">
+
+    <!-- Header -->
+    <header class="p-header">
+      <div class="p-logo">
+        <div class="p-logo-sun" aria-hidden="true"></div>
+        Canarias Hoy
+        <span class="p-badge">Panel de Gestión</span>
+      </div>
+
+      <div class="p-header-filters">
+        <select class="p-select" id="panelIslaFilter" aria-label="Filtrar por isla">
+          <option value="todas">🏝️ Todas las islas</option>
+          <option value="Tenerife">🌋 Tenerife</option>
+          <option value="Gran Canaria">🏖️ Gran Canaria</option>
+          <option value="Lanzarote">🌋 Lanzarote</option>
+          <option value="Fuerteventura">🏜️ Fuerteventura</option>
+          <option value="La Palma">🌿 La Palma</option>
+          <option value="La Gomera">🌲 La Gomera</option>
+          <option value="El Hierro">⚓ El Hierro</option>
+        </select>
+
+        <select class="p-select" id="panelCatFilter" aria-label="Filtrar por categoría">
+          <option value="todas">🗓️ Todas las categorías</option>
+          <option value="festivos">🎉 Festivos</option>
+          <option value="romerias">🕯️ Romerías</option>
+          <option value="carnavales">🎭 Carnavales</option>
+          <option value="conciertos">🎵 Conciertos</option>
+          <option value="mercadillos">🛍️ Mercadillos</option>
+          <option value="deportes">🏄 Deportes</option>
+          <option value="orgullo">🏳️‍🌈 Orgullo</option>
+        </select>
+
+        <button class="p-btn" id="exportBtn" aria-label="Exportar JSON">
+          <span>⬇</span> <span>Exportar JSON</span>
+        </button>
+
+        <button class="p-btn p-btn--primary" id="newEventBtn" aria-label="Nuevo evento">
+          <span>＋</span> <span>Nuevo evento</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main layout -->
+    <div class="p-main">
+
+      <!-- Events grid -->
+      <main class="p-content">
+        <div class="p-grid" id="panelGrid" aria-label="Eventos"></div>
+      </main>
+
+      <!-- Edit panel -->
+      <aside class="edit-panel" id="editPanel" aria-label="Editar evento">
+        <div class="ep-header">
+          <h2 class="ep-title">Editar evento</h2>
+          <button class="ep-close" id="closePanelBtn" aria-label="Cerrar panel">✕</button>
+        </div>
+
+        <!-- Live preview -->
+        <div class="ep-preview">
+          <p class="ep-preview-label">Vista previa en tiempo real</p>
+          <div id="previewCard"></div>
+        </div>
+
+        <!-- Edit form -->
+        <div class="ep-form">
+
+          <div class="ep-field">
+            <label for="editNombre">Nombre del evento</label>
+            <input type="text" id="editNombre" placeholder="Nombre del evento" />
+          </div>
+
+          <div class="ep-field">
+            <label for="editIsla">Isla</label>
+            <select id="editIsla">
+              <option value="Tenerife">🌋 Tenerife</option>
+              <option value="Gran Canaria">🏖️ Gran Canaria</option>
+              <option value="Lanzarote">🌋 Lanzarote</option>
+              <option value="Fuerteventura">🏜️ Fuerteventura</option>
+              <option value="La Palma">🌿 La Palma</option>
+              <option value="La Gomera">🌲 La Gomera</option>
+              <option value="El Hierro">⚓ El Hierro</option>
+            </select>
+          </div>
+
+          <div class="ep-field">
+            <label for="editCat">Categoría</label>
+            <select id="editCat">
+              <option value="festivos">🎉 Festivos</option>
+              <option value="romerias">🕯️ Romerías</option>
+              <option value="carnavales">🎭 Carnavales</option>
+              <option value="conciertos">🎵 Conciertos</option>
+              <option value="mercadillos">🛍️ Mercadillos</option>
+              <option value="deportes">🏄 Deportes</option>
+              <option value="orgullo">🏳️‍🌈 Orgullo</option>
+            </select>
+          </div>
+
+          <div class="ep-field">
+            <label for="editFecha">Fecha</label>
+            <input type="date" id="editFecha" />
+          </div>
+
+          <div class="ep-field">
+            <label for="editDesc">Descripción</label>
+            <textarea id="editDesc" placeholder="Descripción del evento…"></textarea>
+          </div>
+
+          <div class="ep-field">
+            <label>Emoji del evento</label>
+            <div class="emoji-picker" id="emojiPicker"></div>
+          </div>
+
+          <div class="ep-field">
+            <label>Color de acento</label>
+            <div class="color-swatches" id="colorSwatches"></div>
+          </div>
+
+          <div class="ep-field">
+            <div class="check-row">
+              <input type="checkbox" id="editDestacado" />
+              <label for="editDestacado">Marcar como evento destacado</label>
+            </div>
+          </div>
+
+          <div class="ep-actions">
+            <button class="ep-save" id="saveBtn">Guardar cambios</button>
+            <button class="ep-delete" id="deleteBtn">Eliminar evento</button>
+          </div>
+
+        </div>
+      </aside>
+    </div>
+
+    <!-- Status bar -->
+    <div class="status-bar" role="status" aria-live="polite">
+      <div class="sb-item">
+        <span>Total</span>
+        <strong id="sbTotal">0</strong>
+      </div>
+      <span class="sb-sep">·</span>
+      <div class="sb-item">
+        <span>Próximos</span>
+        <strong id="sbProximos">0</strong>
+      </div>
+      <span class="sb-sep">·</span>
+      <div class="sb-item" style="flex:1;overflow:hidden">
+        <span id="sbDist" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete confirmation modal -->
+  <div class="del-modal-backdrop" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="delModalTitle">
+    <div class="del-modal">
+      <h3 id="delModalTitle">¿Eliminar evento?</h3>
+      <p>Vas a eliminar <strong id="deleteModalName"></strong>. Esta acción no se puede deshacer.</p>
+      <div class="del-modal-actions">
+        <button class="del-cancel" id="cancelDelete">Cancelar</button>
+        <button class="del-confirm" id="confirmDelete">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load shared data first, then panel logic -->
+  <script src="script.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

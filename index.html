@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Primary -->
+  <title>Canarias Hoy — Agenda de Eventos en las Islas Canarias 2026</title>
+  <meta name="description" content="Descubre todos los eventos, fiestas, romerías y conciertos de Canarias. Agenda actualizada para Tenerife, Gran Canaria, Lanzarote y todas las islas." />
+  <meta name="keywords" content="eventos Canarias 2026, fiestas Tenerife, romerías Gran Canaria, conciertos Lanzarote, qué hacer en Canarias, agenda cultural Canarias, festivales Fuerteventura" />
+  <link rel="canonical" href="https://canariashoy.es/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://canariashoy.es/" />
+  <meta property="og:title"       content="Canarias Hoy — Agenda de Eventos en las Islas Canarias 2026" />
+  <meta property="og:description" content="Descubre todos los eventos, fiestas, romerías y conciertos de Canarias. Agenda actualizada para Tenerife, Gran Canaria, Lanzarote y todas las islas." />
+  <meta property="og:image"       content="https://canariashoy.es/og-image.jpg" />
+  <meta property="og:locale"      content="es_ES" />
+  <meta property="og:site_name"   content="Canarias Hoy" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Canarias Hoy — Agenda de Eventos Canarias 2026" />
+  <meta name="twitter:description" content="Todo lo que pasa en Canarias, en un solo lugar. Eventos, fiestas y conciertos actualizados." />
+  <meta name="twitter:image"       content="https://canariashoy.es/og-image.jpg" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Schema.org JSON-LD — Primeros 3 eventos destacados -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Gay Pride Maspalomas",
+      "startDate": "2026-05-10",
+      "endDate": "2026-05-12",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "Dunas de Maspalomas",
+        "address": { "@type": "PostalAddress", "addressLocality": "Maspalomas", "addressRegion": "Gran Canaria", "addressCountry": "ES" }
+      },
+      "description": "El mayor orgullo LGTBIQ+ de África y Canarias. Desfile, conciertos y tres días de fiesta en las dunas de Maspalomas.",
+      "organizer": { "@type": "Organization", "name": "Canarias Hoy", "url": "https://canariashoy.es" }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Día de Canarias",
+      "startDate": "2026-05-30",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "Tenerife",
+        "address": { "@type": "PostalAddress", "addressRegion": "Tenerife", "addressCountry": "ES" }
+      },
+      "description": "Fiesta nacional del Archipiélago. Actos institucionales, folklore canario, concurso de lucha y gastronomía tradicional en todas las islas.",
+      "organizer": { "@type": "Organization", "name": "Canarias Hoy", "url": "https://canariashoy.es" }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Sonidos Líquidos",
+      "startDate": "2026-06-06",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "Jameos del Agua",
+        "address": { "@type": "PostalAddress", "addressLocality": "Haría", "addressRegion": "Lanzarote", "addressCountry": "ES" }
+      },
+      "description": "Festival de música electrónica y ambient en los Jameos del Agua. Artistas internacionales en uno de los escenarios más únicos del mundo.",
+      "organizer": { "@type": "Organization", "name": "Canarias Hoy", "url": "https://canariashoy.es" }
+    }
+  ]
+  </script>
+</head>
+<body>
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#inicio" class="logo">
+        <div class="logo__sun" aria-hidden="true"></div>
+        Canarias Hoy
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#esta-semana">Esta semana</a>
+        <a href="#eventos">Eventos</a>
+        <a href="#enviar">Enviar evento</a>
+      </nav>
+
+      <select class="island-select" id="islandSelect" aria-label="Filtrar por isla">
+        <option value="todas">🏝️ Todas las islas</option>
+        <option value="Tenerife">🌋 Tenerife</option>
+        <option value="Gran Canaria">🏖️ Gran Canaria</option>
+        <option value="Lanzarote">🌋 Lanzarote</option>
+        <option value="Fuerteventura">🏜️ Fuerteventura</option>
+        <option value="La Palma">🌿 La Palma</option>
+        <option value="La Gomera">🌲 La Gomera</option>
+        <option value="El Hierro">⚓ El Hierro</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="hero" id="inicio" aria-labelledby="heroH1">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container">
+      <div class="hero__content">
+        <div class="hero__badge" aria-label="Agenda Oficial 2026">🌴 Agenda Oficial 2026</div>
+        <h1 class="hero__h1" id="heroH1">
+          Todo lo que pasa<br>en <em>Canarias</em>, aquí.
+        </h1>
+        <p class="hero__sub">
+          Fiestas, romerías, conciertos, carnavales y mucho más. La agenda definitiva de las 7 Islas Canarias. Siempre actualizada, siempre local.
+        </p>
+        <div class="hero__stats" aria-label="Estadísticas">
+          <div class="stat">
+            <span class="stat__num font-mono" data-count="12" aria-label="12 eventos">0</span>
+            <span class="stat__label">Eventos</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num font-mono" data-count="7" aria-label="7 islas">0</span>
+            <span class="stat__label">Islas</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num font-mono" data-count="7" aria-label="7 categorías">0</span>
+            <span class="stat__label">Categorías</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#0C1A2E"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ══════════════ FILTROS ══════════════ -->
+  <div class="filters-section" id="filtros">
+    <div class="container">
+      <div class="filters-scroll" role="group" aria-label="Filtrar por categoría">
+        <button class="filter-btn active" data-filter="todos">🗓️ Todos</button>
+        <button class="filter-btn" data-filter="festivos">🎉 Festivos</button>
+        <button class="filter-btn" data-filter="romerias">🕯️ Romerías</button>
+        <button class="filter-btn" data-filter="carnavales">🎭 Carnavales</button>
+        <button class="filter-btn" data-filter="conciertos">🎵 Conciertos</button>
+        <button class="filter-btn" data-filter="mercadillos">🛍️ Mercadillos</button>
+        <button class="filter-btn" data-filter="deportes">🏄 Deportes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ ESTA SEMANA ══════════════ -->
+  <section class="section" id="esta-semana" aria-labelledby="featH2">
+    <div class="container">
+      <h2 class="section-title" id="featH2">Esta semana en Canarias</h2>
+      <p class="section-sub">Los eventos destacados que no te puedes perder.</p>
+      <div class="feat-grid" id="featGrid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ TODOS LOS EVENTOS ══════════════ -->
+  <section class="section" id="eventos" aria-labelledby="evH2">
+    <div class="container">
+      <h2 class="section-title" id="evH2">Todos los eventos</h2>
+      <div class="ev-counter" aria-live="polite" aria-atomic="true">
+        <span class="ev-counter__num" id="evCounter">0</span>
+        <span class="ev-counter__label">eventos encontrados</span>
+      </div>
+      <div class="ev-grid" id="evGrid" aria-label="Lista de eventos"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SEO SECTION ══════════════ -->
+  <section class="section seo-section">
+    <div class="container">
+      <h2>La agenda de eventos más completa de las Islas Canarias</h2>
+
+      <p>
+        Si buscas qué hacer en Canarias en 2026, has llegado al sitio correcto. <strong>Canarias Hoy</strong> es la agenda cultural y de ocio más completa del Archipiélago, con eventos actualizados semana a semana para Tenerife, Gran Canaria, Lanzarote, Fuerteventura, La Palma, La Gomera y El Hierro.
+      </p>
+      <p>
+        Desde las <strong>fiestas de Tenerife</strong> más icónicas — como el Carnaval de Santa Cruz o las Fiestas del Cristo de La Laguna — hasta los mejores <strong>conciertos en Lanzarote</strong> como el festival Sonidos Líquidos en los Jameos del Agua, nuestra agenda cubre el calendario completo con información detallada y actualizada.
+      </p>
+      <p>
+        ¿Buscas las <strong>romerías de Gran Canaria</strong>? La Bajada de la Rama en Agaete es uno de los rituales prehispánicos más espectaculares de todo el Archipiélago. ¿O prefieres la escena de los <strong>festivales de Fuerteventura</strong> y sus mercadillos artesanos? Aquí encontrarás todo lo que necesitas para planificar tu agenda cultural canaria sin perderte nada.
+      </p>
+      <p>
+        La <strong>agenda cultural de Canarias</strong> nunca ha sido tan fácil de consultar. Filtra por isla, por categoría y descubre en segundos los próximos eventos que encajan con tus gustos. Añade el tuyo propio usando el botón de abajo y haz que toda la comunidad lo vea.
+      </p>
+
+      <div class="seo-links" role="navigation" aria-label="Filtrar por isla">
+        <button class="seo-link" data-isla-chip="Tenerife">🌋 Eventos en Tenerife</button>
+        <button class="seo-link" data-isla-chip="Gran Canaria">🏖️ Eventos en Gran Canaria</button>
+        <button class="seo-link" data-isla-chip="Lanzarote">🌋 Eventos en Lanzarote</button>
+        <button class="seo-link" data-isla-chip="Fuerteventura">🏜️ Eventos en Fuerteventura</button>
+        <button class="seo-link" data-isla-chip="La Palma">🌿 Eventos en La Palma</button>
+        <button class="seo-link" data-isla-chip="La Gomera">🌲 Eventos en La Gomera</button>
+        <button class="seo-link" data-isla-chip="El Hierro">⚓ Eventos en El Hierro</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="font-size:1.1rem">
+            <div class="logo__sun" style="width:26px;height:26px" aria-hidden="true"></div>
+            Canarias Hoy
+          </div>
+          <p>Todo lo que pasa en Canarias, en un solo lugar. La agenda de eventos, fiestas y conciertos de las 7 Islas Canarias. Actualizada cada semana por y para la comunidad.</p>
+          <div class="footer-islands" style="margin-top:1rem">
+            <button class="isla-chip" data-isla-chip="Tenerife">🌋 Tenerife</button>
+            <button class="isla-chip" data-isla-chip="Gran Canaria">🏖️ Gran Canaria</button>
+            <button class="isla-chip" data-isla-chip="Lanzarote">🌋 Lanzarote</button>
+            <button class="isla-chip" data-isla-chip="Fuerteventura">🏜️ Fuerteventura</button>
+            <button class="isla-chip" data-isla-chip="La Palma">🌿 La Palma</button>
+            <button class="isla-chip" data-isla-chip="La Gomera">🌲 La Gomera</button>
+            <button class="isla-chip" data-isla-chip="El Hierro">⚓ El Hierro</button>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Categorías</h4>
+          <ul>
+            <li><a href="#filtros" onclick="document.querySelector('[data-filter=festivos]').click()">🎉 Festivos</a></li>
+            <li><a href="#filtros" onclick="document.querySelector('[data-filter=romerias]').click()">🕯️ Romerías</a></li>
+            <li><a href="#filtros" onclick="document.querySelector('[data-filter=carnavales]').click()">🎭 Carnavales</a></li>
+            <li><a href="#filtros" onclick="document.querySelector('[data-filter=conciertos]').click()">🎵 Conciertos</a></li>
+            <li><a href="#filtros" onclick="document.querySelector('[data-filter=mercadillos]').click()">🛍️ Mercadillos</a></li>
+            <li><a href="#filtros" onclick="document.querySelector('[data-filter=deportes]').click()">🏄 Deportes</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Participa</h4>
+          <ul>
+            <li><a href="#enviar">Envía tu evento</a></li>
+            <li><a href="panel.html">Panel de gestión</a></li>
+          </ul>
+          <div style="margin-top:1.25rem">
+            <p class="footer-seo">
+              Eventos Canarias · Fiestas Tenerife · Romerías Gran Canaria · Conciertos Lanzarote · Agenda cultural Canarias 2026
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Canarias Hoy · Hecho con ❤️ desde el Archipiélago</p>
+        <p style="font-size:.75rem;color:var(--text-dim)">Agenda de eventos culturales y de ocio de las Islas Canarias</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════ FLOAT BUTTON ══════════════ -->
+  <button class="float-btn" id="openModal" aria-label="Enviar evento">
+    <span aria-hidden="true">✉️</span> Envía tu evento
+  </button>
+
+  <!-- ══════════════ MODAL ENVÍO ══════════════ -->
+  <div class="modal-backdrop" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal__header">
+        <div>
+          <h2 class="modal__title" id="modalTitle">Envía tu evento</h2>
+          <p class="modal__sub">Cuéntanos qué se mueve en tu isla y lo publicamos.</p>
+        </div>
+        <button class="modal__close" id="closeModal" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal__body">
+        <form id="eventForm" novalidate>
+          <!-- Web3Forms campos ocultos -->
+          <input type="hidden" name="access_key" value="TU_ACCESS_KEY" />
+          <input type="hidden" name="subject" value="Nuevo evento — Canarias Hoy" />
+          <input type="hidden" name="from_name" value="Canarias Hoy Web" />
+          <input type="checkbox" name="botcheck" style="display:none" />
+
+          <div class="form-group">
+            <label for="evNombre">Nombre del evento *</label>
+            <input type="text" id="evNombre" name="nombre" placeholder="Ej: Fiesta de San Juan en Las Palmas" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="evIsla">Isla *</label>
+              <select id="evIsla" name="isla" required>
+                <option value="">Selecciona isla</option>
+                <option value="Tenerife">🌋 Tenerife</option>
+                <option value="Gran Canaria">🏖️ Gran Canaria</option>
+                <option value="Lanzarote">🌋 Lanzarote</option>
+                <option value="Fuerteventura">🏜️ Fuerteventura</option>
+                <option value="La Palma">🌿 La Palma</option>
+                <option value="La Gomera">🌲 La Gomera</option>
+                <option value="El Hierro">⚓ El Hierro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="evCat">Categoría *</label>
+              <select id="evCat" name="categoria" required>
+                <option value="">Selecciona categoría</option>
+                <option value="festivos">🎉 Festivos</option>
+                <option value="romerias">🕯️ Romerías</option>
+                <option value="carnavales">🎭 Carnavales</option>
+                <option value="conciertos">🎵 Conciertos</option>
+                <option value="mercadillos">🛍️ Mercadillos</option>
+                <option value="deportes">🏄 Deportes</option>
+                <option value="orgullo">🏳️‍🌈 Orgullo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="evFecha">Fecha del evento *</label>
+            <input type="date" id="evFecha" name="fecha" required />
+          </div>
+
+          <div class="form-group">
+            <label for="evDesc">Descripción</label>
+            <textarea id="evDesc" name="descripcion" placeholder="Cuéntanos los detalles del evento…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="evEmail">Tu email de contacto *</label>
+            <input type="email" id="evEmail" name="email" placeholder="hola@ejemplo.com" required />
+          </div>
+
+          <button type="submit" class="form-submit">Enviar evento</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
