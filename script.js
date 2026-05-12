@@ -725,17 +725,8 @@ function openEventModal(id) {
         ${ev.entradas ? `<a href="${ev.entradas}" target="_blank" rel="noopener" class="evd-btn evd-btn--tickets">🎟️ Comprar entradas</a>` : ''}
         <button class="evd-btn evd-btn--cal" id="evdCalBtn" data-id="${id}">📅 Añadir al calendario</button>
         <button class="evd-btn evd-btn--share" id="evdShareBtn" data-id="${id}">📤 Compartir</button>
-        <button class="evd-btn evd-btn--qr" id="evdQrBtn" data-id="${id}">📱 Código QR</button>
       </div>
       ${ev.ubicacion ? `<div class="evd-map-wrap"><div id="evdLeafletMap" class="evd-leaflet-map"></div></div>` : ''}
-      <div id="evdQrModal" class="evd-qr-modal" hidden>
-        <div class="evd-qr-inner">
-          <button class="evd-qr-close" id="evdQrClose">✕</button>
-          <p class="evd-qr-label">Escanea para abrir este evento</p>
-          <canvas id="evdQrCanvas"></canvas>
-          <p class="evd-qr-name">${ev.nombre}</p>
-        </div>
-      </div>
     </div>
   `;
 
@@ -761,27 +752,6 @@ function openEventModal(id) {
       L.marker(coords, { icon }).addTo(map).bindPopup(`<b>${ev.nombre}</b><br>${ev.ubicacion}`);
     });
   }
-
-  // ── QR code ───────────────────────────────────────────────
-  document.getElementById('evdQrBtn')?.addEventListener('click', () => {
-    const qrModal = document.getElementById('evdQrModal');
-    const canvas  = document.getElementById('evdQrCanvas');
-    if (!qrModal || !canvas) return;
-    const url = `${location.origin}${location.pathname}?evento=${id}`;
-    if (typeof QRCode !== 'undefined') {
-      QRCode.toCanvas(canvas, url, { width: 220, margin: 2, color: { dark: '#F97316', light: '#0C1A2E' } }, () => {});
-    } else {
-      // Fallback: QR API gratuita
-      const img = document.createElement('img');
-      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(url)}&color=F97316&bgcolor=0C1A2E`;
-      img.style.cssText = 'border-radius:8px;max-width:100%';
-      canvas.replaceWith(img);
-    }
-    qrModal.hidden = false;
-  });
-  document.getElementById('evdQrClose')?.addEventListener('click', () => {
-    document.getElementById('evdQrModal').hidden = true;
-  });
 
   // Fav button in modal
   document.getElementById('evdFavBtn')?.addEventListener('click', () => {
