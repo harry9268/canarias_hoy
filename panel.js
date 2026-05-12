@@ -1,17 +1,8 @@
 /* ============================================================
    Canarias Hoy — panel.js
    Lógica del panel de gestión de eventos
-   Versión con integración Supabase
    ============================================================ */
 
-/* ── Supabase config ─────────────────────────────────────── */
-// El cliente ya está creado en script.js (que se carga antes que panel.js)
-// Solo necesitamos referenciar la instancia global `supabase`
-const SUPABASE_URL = 'https://clhteowfpzxdhbmregee.supabase.co';
-const SERVICE_ROLE = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNsaHRlb3dmcHp4ZGhibXJlZ2VlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODU3NTQ5OCwiZXhwIjoyMDk0MTUxNDk4fQ.gbkdash-TE039FL9gY6BwfQ9lPoQlrAevdRKohaoIJI';
-  
-// Re-inicializamos la instancia global de supabase con la clave maestra
-window.supabase = window.supabase.createClient(SUPABASE_URL, SERVICE_ROLE);
 /* ── Password protection ─────────────────────────────────── */
 (function () {
   const KEY   = 'ch_panel_auth';
@@ -45,13 +36,24 @@ window.supabase = window.supabase.createClient(SUPABASE_URL, SERVICE_ROLE);
 })();
 
 /* ── Panel state ─────────────────────────────────────────── */
+// Carga desde localStorage si hay datos guardados (sincronización con index)
+function loadPanelEventos() {
+  try {
+    const raw = localStorage.getItem('ch_eventos_v1');
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (Array.isArray(saved) && saved.length > 0) return saved;
+    }
+  } catch {}
+  return JSON.parse(JSON.stringify(eventos));
+}
 
-let panelEventos    = [];   // Se carga desde Supabase al iniciar
-let selectedId      = null;
-let panelCatFilter  = 'todas';
-let panelIslaFilter = 'todas';
+let panelEventos   = loadPanelEventos();
+let selectedId     = null;
+let panelCatFilter = 'todas';
+let panelIslaFilter= 'todas';
 
-const EMOJIS   = ['🎉','🕯️','🎭','🎵','🛍️','🏄','🏳️‍🌈','🌴','🔥','🎤','🎸','🌿','✝️','🏊','🏝️','🌊','⭐','🎪','🎺','🥁','🎨','🍾','🌟'];
+const EMOJIS = ['🎉','🕯️','🎭','🎵','🛍️','🏄','🏳️‍🌈','🌴','🔥','🎤','🎸','🌿','✝️','🏊','🕯️','🏝️','🌊','⭐','🎪','🎺','🥁','🎨','🍾','🌟'];
 const SWATCHES = ['#EF4444','#92400E','#A855F7','#0EA5E9','#22C55E','#F97316','#EC4899','#FCD34D','#14B8A6','#8B5CF6'];
 
 /* ── Helpers ─────────────────────────────────────────────── */
@@ -64,70 +66,8 @@ function pIsFuture(dateStr) {
   return new Date(dateStr + 'T00:00:00') >= new Date(new Date().toDateString());
 }
 
-/* ── Supabase: Convierte fila DB → objeto web ────────────── */
-function dbToEvento(row) {
-  return {
-    id:        row.id,
-    nombre:    row.nombre,
-    isla:      row.isla,
-    cat:       row.categoria,
-    fecha:     row.fecha,
-    emoji:     row.emoji      || '🎉',
-    color:     row.color      || '#F97316',
-    destacado: row.destacado  || false,
-    desc:      row.descripcion || '',
-    ubicacion: row.ubicacion  || '',
-    maps:      row.maps_url   || null,
-    web:       row.web_url    || null,
-    entradas:  row.entradas_url || null,
-    precio:    row.precio     || null,
-    horario:   row.horario    || null,
-  };
-}
-
-/* ── Supabase: Convierte objeto web → fila DB ────────────── */
-function eventoToDb(ev) {
-  const row = {
-    nombre:       ev.nombre,
-    isla:         ev.isla,
-    categoria:    ev.cat,
-    fecha:        ev.fecha,
-    emoji:        ev.emoji,
-    color:        ev.color,
-    destacado:    ev.destacado,
-    descripcion:  ev.desc,
-    ubicacion:    ev.ubicacion || null,
-    maps_url:     ev.maps      || null,
-    web_url:      ev.web       || null,
-    entradas_url: ev.entradas  || null,
-    precio:       ev.precio    || null,
-    horario:      ev.horario   || null,
-  };
-  // Solo incluye el ID si ya existe (UPDATE), no en INSERT
-  if (ev.id && typeof ev.id === 'number') row.id = ev.id;
-  return row;
-}
-
-/* ── Supabase: Carga todos los eventos ───────────────────── */
-async function cargarPanelEventos() {
-  const grid = document.getElementById('panelGrid');
-  if (grid) grid.innerHTML = '<p class="p-no-results">Cargando eventos… 🌴</p>';
-
-  try {
-    const { data, error } = await supabase
-      .from('eventos')
-      .select('*')
-      .order('fecha', { ascending: true });
-
-    if (error) throw error;
-    panelEventos = (data || []).map(dbToEvento);
-  } catch (err) {
-    console.error('Error cargando eventos:', err);
-    pShowToast('Error al conectar con Supabase. Comprueba tu conexión.', 'error');
-    panelEventos = [];
-  }
-
-  renderPanelGrid();
+function getNextId() {
+  return Math.max(0, ...panelEventos.map(e => e.id)) + 1;
 }
 
 /* ── Render grid ─────────────────────────────────────────── */
@@ -151,14 +91,14 @@ function renderPanelGrid() {
   grid.querySelectorAll('.p-card').forEach(card => {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.p-card__del')) return;
-      selectEvent(parseId(card.dataset.id));
+      selectEvent(parseInt(card.dataset.id));
     });
   });
 
   grid.querySelectorAll('.p-card__del').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      confirmDelete(parseId(btn.dataset.id));
+      confirmDelete(parseInt(btn.dataset.id));
     });
   });
 
@@ -195,12 +135,12 @@ function selectEvent(id) {
   const panel = document.getElementById('editPanel');
   panel.classList.add('open');
 
-  document.getElementById('editNombre').value       = ev.nombre;
-  document.getElementById('editIsla').value         = ev.isla;
-  document.getElementById('editCat').value          = ev.cat;
-  document.getElementById('editFecha').value        = ev.fecha;
-  document.getElementById('editDesc').value         = ev.desc;
-  document.getElementById('editDestacado').checked  = ev.destacado;
+  document.getElementById('editNombre').value    = ev.nombre;
+  document.getElementById('editIsla').value      = ev.isla;
+  document.getElementById('editCat').value       = ev.cat;
+  document.getElementById('editFecha').value     = ev.fecha;
+  document.getElementById('editDesc').value      = ev.desc;
+  document.getElementById('editDestacado').checked = ev.destacado;
 
   renderEmojiPicker(ev.emoji, ev);
   renderColorSwatches(ev.color, ev);
@@ -288,137 +228,55 @@ function syncFromForm() {
 function syncGridCard(ev) {
   const card = document.querySelector(`.p-card[data-id="${ev.id}"]`);
   if (!card) return;
-  const tmp = document.createElement('div');
-  tmp.innerHTML = buildPanelCard(ev);
-  const newCard = tmp.firstElementChild;
-  card.replaceWith(newCard);
+  card.outerHTML = buildPanelCard(ev);
   rebindCardEvents();
-}
-
-function parseId(raw) {
-  const n = Number(raw);
-  return isNaN(n) ? raw : n;
 }
 
 function rebindCardEvents() {
   document.querySelectorAll('.p-card').forEach(card => {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.p-card__del')) return;
-      selectEvent(parseId(card.dataset.id));
+      selectEvent(parseInt(card.dataset.id));
     });
   });
   document.querySelectorAll('.p-card__del').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      confirmDelete(parseId(btn.dataset.id));
+      confirmDelete(parseInt(btn.dataset.id));
     });
   });
 }
 
-/* ── GUARDAR (INSERT o UPDATE en Supabase) ───────────────── */
+/* ── Save ────────────────────────────────────────────────── */
 function initSave() {
-  document.getElementById('saveBtn')?.addEventListener('click', async () => {
-    if (!selectedId) return;
+  document.getElementById('saveBtn')?.addEventListener('click', () => {
     syncFromForm();
-
-    const ev = panelEventos.find(e => e.id === selectedId);
-    if (!ev) return;
-
-    const saveBtn = document.getElementById('saveBtn');
-    saveBtn.disabled = true;
-    saveBtn.textContent = 'Guardando…';
-
-    try {
-      const isNew = typeof ev.id === 'string' && ev.id.startsWith('new_');
-
-      if (isNew) {
-        // ── INSERT ──
-        const dbRow = eventoToDb(ev);
-        delete dbRow.id; // Deja que Supabase auto-genere el ID
-
-        const { data, error } = await supabase
-          .from('eventos')
-          .insert([dbRow])
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        // Actualiza el ID temporal por el real
-        const idx = panelEventos.findIndex(e => e.id === selectedId);
-        panelEventos[idx] = dbToEvento(data);
-        selectedId = panelEventos[idx].id;
-
-      } else {
-        // ── UPDATE ──
-        const { error } = await supabase
-          .from('eventos')
-          .update(eventoToDb(ev))
-          .eq('id', ev.id);
-
-        if (error) throw error;
-      }
-
-      pShowToast('✅ Cambios guardados y publicados en tiempo real.', 'success');
-      renderPanelGrid();
-
-    } catch (err) {
-      console.error('Error guardando evento:', err);
-      pShowToast('❌ Error al guardar. Comprueba la conexión.', 'error');
-    } finally {
-      saveBtn.disabled = false;
-      saveBtn.textContent = 'Guardar cambios';
-    }
+    // Persiste en localStorage para que index.html lo vea
+    if (typeof saveEventos === 'function') saveEventos(panelEventos);
+    else { try { localStorage.setItem('ch_eventos_v1', JSON.stringify(panelEventos)); } catch {} }
+    pShowToast('Cambios guardados y publicados ✓', 'success');
+    renderPanelGrid();
   });
 }
 
-/* ── ELIMINAR (DELETE en Supabase) ──────────────────────── */
+/* ── Delete ──────────────────────────────────────────────── */
 function confirmDelete(id) {
   const ev = panelEventos.find(e => e.id === id);
   if (!ev) return;
   const modal = document.getElementById('deleteModal');
   document.getElementById('deleteModalName').textContent = ev.nombre;
   modal.classList.add('open');
-
-  document.getElementById('confirmDelete').onclick = async () => {
-    const confirmBtn = document.getElementById('confirmDelete');
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = 'Eliminando…';
-
-    try {
-      // Si el evento tiene ID temporal (nunca guardado), solo lo quita localmente
-      const isNew = typeof id === 'string' && id.startsWith('new_');
-
-      if (!isNew) {
-        const { error } = await supabase
-          .from('eventos')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-      }
-
-      panelEventos = panelEventos.filter(e => e.id !== id);
-      modal.classList.remove('open');
-
-      if (selectedId === id) {
-        selectedId = null;
-        document.getElementById('editPanel').classList.remove('open');
-      }
-
-      renderPanelGrid();
-      pShowToast('🗑️ Evento eliminado correctamente.', 'success');
-
-    } catch (err) {
-      console.error('Error eliminando evento:', err);
-      pShowToast('❌ Error al eliminar. Comprueba la conexión.', 'error');
-      modal.classList.remove('open');
-    } finally {
-      confirmBtn.disabled = false;
-      confirmBtn.textContent = 'Sí, eliminar';
+  document.getElementById('confirmDelete').onclick = () => {
+    panelEventos = panelEventos.filter(e => e.id !== id);
+    try { localStorage.setItem('ch_eventos_v1', JSON.stringify(panelEventos)); } catch {}
+    modal.classList.remove('open');
+    if (selectedId === id) {
+      selectedId = null;
+      document.getElementById('editPanel').classList.remove('open');
     }
+    renderPanelGrid();
+    pShowToast('Evento eliminado.', 'success');
   };
-
   document.getElementById('cancelDelete').onclick = () => modal.classList.remove('open');
 }
 
@@ -429,50 +287,31 @@ function initDeleteBtn() {
   });
 }
 
-/* ── NUEVO EVENTO (crea localmente, guarda al pulsar Guardar) */
+/* ── New event ───────────────────────────────────────────── */
 function initNewEvent() {
   document.getElementById('newEventBtn')?.addEventListener('click', () => {
-    // Usamos ID temporal hasta que se pulse "Guardar"
-    const tempId = 'new_' + Date.now();
     const newEv = {
-      id:        tempId,
-      nombre:    'Nuevo evento',
-      isla:      'Tenerife',
-      cat:       'festivos',
-      fecha:     new Date().toISOString().split('T')[0],
-      emoji:     '🎉',
-      color:     '#EF4444',
-      desc:      'Descripción del evento.',
-      destacado: false,
-      ubicacion: '',
-      maps:      null,
-      web:       null,
-      entradas:  null,
-      precio:    null,
-      horario:   null,
+      id: getNextId(), nombre: 'Nuevo evento', isla: 'Tenerife', cat: 'festivos',
+      fecha: new Date().toISOString().split('T')[0], emoji: '🎉',
+      color: '#EF4444', desc: 'Descripción del evento.', destacado: false,
     };
     panelEventos.unshift(newEv);
     renderPanelGrid();
-    selectEvent(tempId);
-    pShowToast('✨ Nuevo evento creado. Edítalo y pulsa "Guardar".', 'success');
+    selectEvent(newEv.id);
+    pShowToast('Nuevo evento creado. ¡Edítalo a continuación!', 'success');
   });
 }
 
-/* ── Cerrar panel ────────────────────────────────────────── */
+/* ── Close panel ─────────────────────────────────────────── */
 function initClosePanel() {
   document.getElementById('closePanelBtn')?.addEventListener('click', () => {
-    // Si hay un evento no guardado (ID temporal), pregunta antes de cerrar
-    if (selectedId && typeof selectedId === 'string' && selectedId.startsWith('new_')) {
-      if (!confirm('¿Descartar el nuevo evento sin guardar?')) return;
-      panelEventos = panelEventos.filter(e => e.id !== selectedId);
-    }
     selectedId = null;
     document.getElementById('editPanel').classList.remove('open');
     renderPanelGrid();
   });
 }
 
-/* ── Exportar JSON ───────────────────────────────────────── */
+/* ── Export JSON ─────────────────────────────────────────── */
 function initExport() {
   document.getElementById('exportBtn')?.addEventListener('click', () => {
     const json = JSON.stringify(panelEventos, null, 2);
@@ -482,20 +321,21 @@ function initExport() {
     a.href = url; a.download = 'canarias-hoy-eventos.json';
     a.click();
     URL.revokeObjectURL(url);
-    pShowToast('📥 JSON exportado correctamente.', 'success');
+    pShowToast('JSON exportado correctamente.', 'success');
   });
 
-  // Restablecer: recarga desde Supabase (ya no hay localStorage)
-  document.getElementById('resetBtn')?.addEventListener('click', async () => {
-    if (!confirm('¿Recargar todos los eventos desde la base de datos?')) return;
+  document.getElementById('resetBtn')?.addEventListener('click', () => {
+    if (!confirm('¿Restablecer los eventos originales? Se perderán los cambios guardados.')) return;
+    try { localStorage.removeItem('ch_eventos_v1'); } catch {}
+    panelEventos = JSON.parse(JSON.stringify(eventos));
     selectedId = null;
     document.getElementById('editPanel')?.classList.remove('open');
-    await cargarPanelEventos();
-    pShowToast('🔄 Eventos recargados desde Supabase.', 'success');
+    renderPanelGrid();
+    pShowToast('Eventos restablecidos al original.', 'success');
   });
 }
 
-/* ── Filtros ─────────────────────────────────────────────── */
+/* ── Filters ─────────────────────────────────────────────── */
 function initPanelFilters() {
   document.getElementById('panelIslaFilter')?.addEventListener('change', (e) => {
     panelIslaFilter = e.target.value;
@@ -507,7 +347,7 @@ function initPanelFilters() {
   });
 }
 
-/* ── Barra de estado ─────────────────────────────────────── */
+/* ── Status bar ──────────────────────────────────────────── */
 function updateStatusBar() {
   const total    = document.getElementById('sbTotal');
   const proximos = document.getElementById('sbProximos');
@@ -537,11 +377,8 @@ function pShowToast(msg, type = 'success') {
 }
 
 /* ── Init ────────────────────────────────────────────────── */
-async function initPanel() {
-  // Carga los eventos de Supabase primero
-  await cargarPanelEventos();
-
-  // Luego activa toda la UI
+function initPanel() {
+  renderPanelGrid();
   initLiveEdit();
   initSave();
   initDeleteBtn();
