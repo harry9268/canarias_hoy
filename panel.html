@@ -6,6 +6,7 @@
   <title>Panel de Gestión — Canarias Hoy</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="panel.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -13,7 +14,15 @@
   <div id="authWall">
     <div class="auth-box">
       <div class="auth-logo">
-        <div class="auth-sun" aria-hidden="true"></div>
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:36px;height:36px">
+          <circle cx="20" cy="20" r="20" fill="#0C1A2E"/>
+          <circle cx="20" cy="20" r="13" fill="#F97316" opacity="0.9"/>
+          <circle cx="20" cy="20" r="7" fill="#FCD34D"/>
+          <line x1="20" y1="2"  x2="20" y2="7"  stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="20" y1="33" x2="20" y2="38" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="2"  y1="20" x2="7"  y2="20" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="33" y1="20" x2="38" y2="20" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
         Canarias Hoy
       </div>
       <p class="auth-badge">Panel de Gestión · Acceso restringido</p>
@@ -40,7 +49,15 @@
     <!-- Header -->
     <header class="p-header">
       <div class="p-logo">
-        <div class="p-logo-sun" aria-hidden="true"></div>
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:32px;height:32px;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(249,115,22,.5))">
+          <circle cx="20" cy="20" r="20" fill="#0C1A2E"/>
+          <circle cx="20" cy="20" r="13" fill="#F97316" opacity="0.9"/>
+          <circle cx="20" cy="20" r="7" fill="#FCD34D"/>
+          <line x1="20" y1="2"  x2="20" y2="7"  stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="20" y1="33" x2="20" y2="38" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="2"  y1="20" x2="7"  y2="20" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="33" y1="20" x2="38" y2="20" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
         Canarias Hoy
         <span class="p-badge">Panel de Gestión</span>
       </div>
@@ -70,6 +87,10 @@
 
         <button class="p-btn" id="exportBtn" aria-label="Exportar JSON">
           <span>⬇</span> <span>Exportar JSON</span>
+        </button>
+
+        <button class="p-btn" id="resetBtn" aria-label="Restablecer eventos originales" title="Vuelve a los eventos originales del JS">
+          <span>↺</span> <span>Restablecer</span>
         </button>
 
         <button class="p-btn p-btn--primary" id="newEventBtn" aria-label="Nuevo evento">
