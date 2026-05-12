@@ -1590,7 +1590,11 @@ a   { color: inherit; text-decoration: none; }
 
   .date-filters {
     gap: .3rem;
-    padding-bottom: .1rem;
+    padding-bottom: .25rem;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
   }
 
   .date-btn {
@@ -1601,12 +1605,18 @@ a   { color: inherit; text-decoration: none; }
 
   .filters-scroll {
     gap: .4rem;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: .35rem;
   }
 
   .filter-btn {
     padding: .45rem .85rem;
     font-size: .78rem;
     gap: .3rem;
+    flex-shrink: 0;
   }
 
   /* Events grid */
@@ -1892,3 +1902,50 @@ a   { color: inherit; text-decoration: none; }
 
 /* Make evd modal position:relative so QR overlay works */
 #evDetailContent { position: relative; }
+
+/* ── Prevenir desbordamiento horizontal en móvil ─────────── */
+@media (max-width: 640px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  .container {
+    overflow: hidden;
+  }
+
+  /* Los scrolls de filtros necesitan overflow-x visible,
+     así que los sacamos del contenedor con padding negativo */
+  .filters-section .container {
+    overflow: visible;
+    padding-inline: 0;
+  }
+
+  .filters-top-row {
+    padding-inline: clamp(1rem, 5vw, 2.5rem);
+  }
+
+  .date-filters,
+  .filters-scroll {
+    padding-inline: clamp(1rem, 5vw, 2.5rem);
+    /* Fade a la derecha para indicar scroll */
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  }
+
+  /* Float btn: más pequeño y esquina inferior derecha,
+     sin tapar elementos de contenido */
+  .float-btn {
+    bottom: 5rem;
+    right: 1rem;
+    padding: .6rem 1rem;
+    font-size: .82rem;
+    gap: .3rem;
+    box-shadow: 0 4px 16px rgba(249,115,22,.5);
+  }
+
+  /* Newsletter: añadir padding abajo para que el float-btn no tape nada */
+  .newsletter-section {
+    padding-bottom: 5rem;
+  }
+}
